@@ -10,27 +10,18 @@ export class ProductController {
   }
 
   async getProducts(req: Request, res: Response) {
-    try {
       const products = await this.productRepository.find();
       res.json(products);
-    } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
-    }
   }
 
   async createProduct(req: Request, res: Response) {
-    try {
-      const { name, price } = req.body;
-      const product = await this.productRepository.create({ name, price });
+      const { name, price, description } = req.body;
+      const product = await this.productRepository.create({ name, price, description });
       await this.productRepository.save(product);
       res.status(201).json(product);
-    } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
-    }
   }
 
   async updateProduct(req: Request, res: Response) {
-    try {
       const { id } = req.params;
       const { name, price } = req.body;
       const product = await this.productRepository.findOne(id);
@@ -41,13 +32,9 @@ export class ProductController {
       product.price = price;
       await this.productRepository.save(product);
       res.json(product);
-    } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
-    }
   }
 
   async deleteProduct(req: Request, res: Response) {
-    try {
       const { id } = req.params;
       const product = await this.productRepository.findOne(id);
       if (!product) {
@@ -55,8 +42,5 @@ export class ProductController {
       }
       await this.productRepository.remove(product);
       res.json({ message: 'Product deleted successfully' });
-    } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
-    }
   }
 }

@@ -2,6 +2,7 @@ import express from "express";
 import { setProductRoutes } from "./routes/productRoutes";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+import { errorHandler } from './middleware/errorHandler';
 
 // create connection with database
 // note that it's not active database connection
@@ -9,9 +10,9 @@ import { createConnection } from "typeorm";
 createConnection()
   .then(async (connection) => {
     const app = express();
-
     // Middleware
     app.use(express.json());
+    app.use(errorHandler);
 
     // Routes
     setProductRoutes(app);
